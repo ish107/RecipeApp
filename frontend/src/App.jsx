@@ -3,6 +3,7 @@ import { Home } from "./pages/Home"
 import { Register } from "./pages/Register"
 import { CreateRecipe } from "./pages/createRecipe"
 import { Navbar } from "./components/navbar.jsx"
+import "./App.css"
 
 
 function App() {
@@ -14,8 +15,8 @@ function App() {
                 <Route path="/" element={<Home/>}/>
                 <Route path="/createRecipe" element={<CreateRecipe/>}/>
                 <Route path="/Register" element={<Register/>}/>
-            
             </Routes>
+            
         </Router>
     </div>
   )

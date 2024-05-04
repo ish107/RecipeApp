@@ -1,6 +1,5 @@
 import express from "express";
 import jwt from 'jsonwebtoken';
-import bcrypt from 'bcrypt';
 
 import { User } from "../Models/users.js";
 
@@ -34,6 +33,7 @@ router.post('/register', async(req,res)=>{
 
 //login
 router.post('/login', async(req,res)=>{
+    const {username,password} = req.body;
     try{
         if(
             !req.body.username || !req.body.password
@@ -44,11 +44,11 @@ router.post('/login', async(req,res)=>{
         if(!uname){
             return res.status(201).send("Invalid username")
         }
-        const isPasswordValid = bcrypt.compare(password,uname.password)
+        const isPasswordValid = (password === uname.password)
         if(!isPasswordValid){
             return res.status(201).send("username and password did not match")
         }
-        const token = jwt.sign({id:uname_id},"secret")
+        const token = jwt.sign({id:uname._id},"secret")
         res.json({token,userID:uname._id})
     }catch(err){
         console.log(err.message);

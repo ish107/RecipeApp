@@ -17,7 +17,9 @@ router.post('/', async(req,res)=>{
             title: req.body.title,
             ingredients: req.body.ingredients,
             instructions:req.body.instructions,
-            cooktime: req.body.cooktime
+            imageUrl: req.body.imageUrl,
+            cookingTime: req.body.cookingTime,
+            userOwner: req.body.userOwner
         };
         const recipe = await Recipe.create(newRecipe);
         return res.status(201).send(recipe)
@@ -30,15 +32,13 @@ router.post('/', async(req,res)=>{
 //get recipes
 router.get('/',async(req,res)=>{
     try{
-        const recipes = await Recipe.find({});
-        return res.status(200).json({
-            count:recipes.length,
-            data:recipes
-        });
+        const recipes = await Recipe.find({}); //recipe.js of models
+        return res.status(200).json(recipes);
     }catch(err){
         console.log(err.message);
         res.status(500).send({message:err.message})
     }
+    
 });
 
 //get one recipe by id

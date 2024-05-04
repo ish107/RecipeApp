@@ -1,0 +1,52 @@
+.register-form{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width:100%;
+    height: 100vh;
+    background-image: url("../assets/foods.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+.reg-form{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background-color: whitesmoke;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    margin: 20px;
+    width: 600px;
+}
+.form-detais{
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+}
+
+label {
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-align: center;
+  }
+  
+input {
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: black solid 1px;
+  }
+
+.btn-reg{
+    cursor: pointer;
+    border: 0;
+    border-radius: 4px;
+    font-weight: 600;
+    margin: 0 10px;
+    width: 200px;
+    padding: 10px 0;
+    box-shadow: 0 0 20px rgba(104, 85, 224, 0.2);
+    transition: 0.4s;
+}
