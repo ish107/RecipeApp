@@ -31,6 +31,16 @@ const recipeSchema = new mongoose.Schema({
         type:mongoose.Schema.Types.ObjectId, //_id of the user schema
         ref:"users",
         required:true
+    },
+    filters: {
+        type: [String],
+        enum:  ['All','Asian', 'Breakfast', 'Lunch', 'Dinner', 'Western'],
+        default: ["All"] 
+    },
+    rating: {
+        average: { type: Number, default: 0 }, 
+        count: { type: Number, default: 0 },  
+        
     }
       
 });

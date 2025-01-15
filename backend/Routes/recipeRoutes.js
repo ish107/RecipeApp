@@ -1,5 +1,6 @@
 import express from "express";
 import { Recipe } from "../Models/recipe.js";
+import {updateRating} from '../utils/updateRating.js'
 
 
 const router = express.Router();
@@ -19,6 +20,7 @@ router.post('/', async(req,res)=>{
             instructions:req.body.instructions,
             imageUrl: req.body.imageUrl,
             cookingTime: req.body.cookingTime,
+            filters: req.body.filters,
             userOwner: req.body.userOwner
         };
         const recipe = await Recipe.create(newRecipe);
@@ -50,6 +52,23 @@ router.get('/:id',async(req,res)=>{
     }catch(err){
         console.log(err.message);
         res.status(500).send({message:err.message})
+    }
+});
+
+//update rating
+router.put("/:id/rate", async (req, res) => {
+    const { id } = req.params; 
+    const { userId, ratingValue } = req.body; 
+
+    if (!userId || ratingValue === undefined) {
+        return res.status(400).json({ message: "User ID and rating value are required." });
+    }
+
+    try {
+        const { user, recipe } = await updateRating(userId, id, ratingValue);
+        res.status(200).json({ message: "Rating updated successfully.", user, recipe });
+    } catch (error) {
+        res.status(500).json({ message: "Error updating rating.", error: error.message });
     }
 });
 

@@ -1,0 +1,51 @@
+
+.logo{
+    width:120px;
+    cursor: pointer;
+}
+ 
+
+@media screen and (max-width: 780px) {
+    ul li {
+      display: none;
+    }
+    
+    .logo{
+        margin: auto;
+    }
+    .mobile{
+        margin-left: 50%;
+    }
+    .icon{
+        display: block;
+       
+       
+    }
+    
+    .navbar{
+        display: block;
+    }
+    .search-bar{
+        justify-content: space-between;
+    }
+}
+
+  
+@media screen and (max-width: 780px) {
+    .responsive .navbar{
+        background-color: whitesmoke;
+    }
+
+    .responsive ul li{
+      float: none;
+      display: block;
+      text-align: center;
+    }
+    .responsive .logo{
+        margin: auto;
+    }
+    .responsive .mobile{
+        margin-left: 50%;
+    }
+    
+}
