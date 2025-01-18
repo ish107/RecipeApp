@@ -1,6 +1,5 @@
 import mongoose from "mongoose"
 
-
 const recipeSchema = new mongoose.Schema({
     title:{
         type:String,
@@ -29,8 +28,18 @@ const recipeSchema = new mongoose.Schema({
     },
     userOwner:{
         type:mongoose.Schema.Types.ObjectId, //_id of the user schema
-        ref:"users",
+        ref:"User",
         required:true
+    },
+    filters: {
+        type: [String],
+        enum:  ['All','Asian', 'Breakfast', 'Lunch', 'Dinner', 'Western'],
+        default: ["All"] 
+    },
+    rating: {
+        average: { type: Number, default: 0 }, 
+        count: { type: Number, default: 0 },  
+        
     }
       
 });

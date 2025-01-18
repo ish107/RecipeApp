@@ -1,14 +1,15 @@
 import express from "express";
 import mongoose from "mongoose";
-import {PORT,mongoDBUrl} from './config.js';
+import dotenv from "dotenv";
 import cors from 'cors';
 import {recipeRouter}from "./Routes/recipeRoutes.js";
 import {userRouter}from "./Routes/userRoutes.js";
 
+dotenv.config();
 
 const app = express();
 const corsOptions = {
-    origin: 'http://localhost:5173', //frontend URL
+    origin: process.env.FRONTEND_URL,
   };
   
 
@@ -16,8 +17,12 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use('/recipe',recipeRouter)
-app.use('/auth',userRouter)
+app.use('/user',userRouter)
 
+const PORT = process.env.PORT || 5000;
+const mongoDBUrl = process.env.MONGO_URL;
+
+console.log("MongoDB URL:", process.env.MONGO_URL);
 
 app.listen(PORT,()=>{
     console.log(`listening on ${PORT}`)

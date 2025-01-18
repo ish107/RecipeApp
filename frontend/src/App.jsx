@@ -2,7 +2,7 @@ import {BrowserRouter as Router,Routes,Route} from "react-router-dom"
 import { Home } from "./pages/Home"
 import { Register } from "./pages/Register"
 import { CreateRecipe } from "./pages/createRecipe"
-import { Navbar } from "./components/navbar.jsx"
+import { Navbar } from "./components/navbar/navbar.jsx"
 import "./App.css"
 
 
