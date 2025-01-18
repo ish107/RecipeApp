@@ -22,16 +22,8 @@ const userSlice = createSlice({
       state.isAuthenticated = false;
     },
     setUserRating : (state, action) => {
-      const { recipeId, rating } = action.payload;
-      if (!state.user) return;
-      console.log(action.payload)
-      const existingRating = state.user.ratingsGiven.find(r => r.recipeId === recipeId);
-
-      if (existingRating) {
-        existingRating.rating = rating;
-      } else {
-        state.user.ratings.push({ recipeId, rating });
-      }
+      //const { recipeId, rating } = action.payload;
+      state.user.ratingsGiven = action.payload;
     },
   }
 });

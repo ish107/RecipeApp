@@ -3,39 +3,38 @@ import { useSelector,useDispatch} from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 import axiosInstance from '../../../util/axios';
+import { setUserRating } from '../../../store/userSlice';
 import { Dialog, DialogActions, DialogContent, DialogTitle, Button, Typography, CardMedia, Rating, Box, List, ListItem, ListItemIcon, ListItemText, Chip} from '@mui/material';
 import KitchenIcon from '@mui/icons-material/Kitchen';
-import { setUserRating } from '../../../store/userSlice';
 
 const ViewRecipe = ({ open, onClose, recipe }) => {
 
-  const user = useSelector((state) => state.user.user?.id);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  console.log('user' ,user, recipe._id);
-  const [rating, setRating] = useState(recipe?.rating || 0);
-
   if (!recipe) return null;
+
+  const user = useSelector((state) => state.user.user?.id);
+  const ratings = useSelector((state) => state.user.user?.ratingsGiven) || [];
+
+  const oldRating = (ratings.find(item => item.recipeId === recipe._id))?.value || null;
+
+  const [rating, setRating] = useState(oldRating && oldRating || 0);
 
   const handleRatingChange = (value) => {
     setRating(value);
   };
 
   const handleRatingSave = async () => {
-      console.log(recipe._id, user, rating)
       try {
         const response = await axiosInstance.put(`/user/${user}/rate-recipe`, {
           recipeId: recipe._id,
           ratingValue: rating,
         });
-        console.log('res',response.data);
         dispatch(setUserRating(response.data.user.ratingsGiven)); 
-        console.log(response.data.message); 
       } catch (error) {
         console.error("Error updating rating:", error.message);
       }
-    
   };
 
   const handleClick =() =>{

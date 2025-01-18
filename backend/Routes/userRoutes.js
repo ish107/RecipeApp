@@ -73,7 +73,7 @@ router.post('/login', async(req,res)=>{
             return res.status(201).send("username and password did not match")
         }
         const token = jwt.sign({ id: uname._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
-        res.json({token,userID:uname._id, username: uname.username , favorites: uname.favorites})
+        res.json({token,userID:uname._id, username: uname.username , favorites: uname.favorites, ratingsGiven: uname.ratingsGiven})
     }catch(err){
         console.log(err.message);
         res.status(500).send({message : err.message});

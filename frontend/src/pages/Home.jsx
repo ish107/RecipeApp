@@ -11,6 +11,7 @@ export const Home = () => {
   
   const recipes = useSelector((state) => state.recipes.recipes);
   const user = useSelector((state) => state.user.user)
+  console.log('user',user)
   const dispatch = useDispatch();
   
   const [selectedFilters, setSelectedFilters] = useState(['All']);

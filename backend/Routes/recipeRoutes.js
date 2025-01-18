@@ -56,7 +56,7 @@ router.get('/:id',async(req,res)=>{
 });
 
 //update rating
-router.put("/:id/rate", async (req, res) => {
+ router.put('/:id/rate', async (req, res) => {
     const { id } = req.params; 
     const { userId, ratingValue } = req.body; 
 
