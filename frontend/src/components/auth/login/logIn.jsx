@@ -33,6 +33,7 @@ const LogIn = () => {
             id: response.data.userID,
             username: response.data.username,
             favorites: response.data.favorites,
+            ratingsGiven: response.data.ratingsGiven,
           },
           token: response.data.token,
         }));

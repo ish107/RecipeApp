@@ -28,8 +28,8 @@ export const Navbar = () => {
   };
 
   const handleLogout = () => {
-    dispatch(setUser({ user: { username: '', favorites: [] }, token: '' }));  
     window.localStorage.clear(); 
+    dispatch(setUser({ user: { username: '', favorites: [] }, token: '' }));  
     navigate('/'); 
   };
 

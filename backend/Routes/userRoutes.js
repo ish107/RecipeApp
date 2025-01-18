@@ -82,9 +82,10 @@ router.post('/login', async(req,res)=>{
 });
 
 //update rating
-router.put("/:userId/rate-recipe", async (req, res) => {
+router.put("users/:userId/rate-recipe", async (req, res) => {
     const { userId } = req.params;
     const { recipeId, ratingValue } = req.body;
+    console.log(userId,recipeId,ratingValue)
 
     if (!recipeId || ratingValue === undefined) {
         return res.status(400).json({ message: "Recipe ID and rating value are required." });

@@ -1,15 +1,46 @@
-import * as React from 'react';
-import { Dialog, DialogActions, DialogContent, DialogTitle, Button, Typography, CardMedia, Rating, Box, List, ListItem, ListItemIcon, ListItemText, Divider } from '@mui/material';
+import  React,{useState, useCallback} from 'react';
+import { useSelector,useDispatch} from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import debounce from "lodash/debounce";
+
+import axiosInstance from '../../../util/axios';
+import { Dialog, DialogActions, DialogContent, DialogTitle, Button, Typography, CardMedia, Rating, Box, List, ListItem, ListItemIcon, ListItemText, Chip} from '@mui/material';
 import KitchenIcon from '@mui/icons-material/Kitchen';
+import { setUserRating } from '../../auth/login/loginSlice';
+
 
 const ViewRecipe = ({ open, onClose, recipe }) => {
-  const [rating, setRating] = React.useState(recipe?.rating || 0);
+
+  const user = useSelector((state) => state.auth.user?.id);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  console.log('user' ,user, recipe);
+  const [rating, setRating] = useState(recipe?.rating || 0);
 
   if (!recipe) return null;
 
-  const handleRatingChange = (event, newRating) => {
-    setRating(newRating);
+  const handleRatingChange = async (event, newRating) => {
+    
+      setRating(newRating);
+      console.log(rating)
+      try {
+        const response = await axiosInstance.put(`users/${user}/rate-recipe`, {
+          recipeId: recipe._id,
+          ratingValue: newRating,
+        });
+        console.log('res',response.data);
+        dispatch(setUserRating(response.data.user.rating)); 
+        console.log(response.data.message); 
+      } catch (error) {
+        console.error("Error updating rating:", error.message);
+      }
+    
   };
+
+  const handleClick =() =>{
+    navigate("/Register")
+  }
 
   return (
     <Dialog 
@@ -42,12 +73,14 @@ const ViewRecipe = ({ open, onClose, recipe }) => {
                 Rate this Dish
               </Typography>
               <Rating
-                name="recipe-rating"
+                name={"simple-controlled"}
                 value={rating}
                 onChange={handleRatingChange}
                 precision={0.5}
                 sx={{ fontSize: 28 }}
+                disabled={!user}
               />
+              {!user && <Chip label="LogIn to rate this dish" onClick={handleClick} color='success' sx={{marginTop: 2}}/>}
             </Box>
           </Box>
           <Box sx={{ width: '50%', pl: 2, }}>

@@ -10,6 +10,7 @@ import "../styles/home.css";
 export const Home = () => {
   
   const recipes = useSelector((state) => state.recipes.recipes);
+  const user = useSelector((state) => state.auth.user)
   const dispatch = useDispatch();
   const [selectedFilters, setSelectedFilters] = useState(['All']);
   const [filteredRecipes, setFilteredRecipes] = useState([]);
