@@ -1,4 +1,4 @@
-#Recipe App
+#Recipe App#
 **A MERN stack application to browse, add, and save recipes. Built with MongoDB, Express, React, and Node.js. 
 
 Features
