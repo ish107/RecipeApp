@@ -1,4 +1,3 @@
-
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
@@ -25,9 +24,17 @@ const userSlice = createSlice({
       //const { recipeId, rating } = action.payload;
       state.user.ratingsGiven = action.payload;
     },
+    addFavorites : (state, action) => {
+      state.user.favorites.push(action.payload)
+    },
+    removeFavorites : (state,action) => {
+      if (state.user) {
+        state.user.favorites = state.user.favorites.filter(fav => fav !== action.payload);
+    }
+    }
   }
 });
 
-export const { setUser, logout , setUserRating} = userSlice.actions;
+export const { setUser, logout , setUserRating, addFavorites, removeFavorites} = userSlice.actions;
 
 export default userSlice.reducer;

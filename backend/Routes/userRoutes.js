@@ -92,12 +92,73 @@ router.put('/:userId/rate-recipe', async (req, res) => {
     }
 
     try {
-        const { user, recipe } = await updateRating(userId, recipeId, ratingValue);
+        const { user, recipe} = await updateRating(userId, recipeId, ratingValue);
         res.status(200).json({ message: "Rating updated successfully.", user, recipe });
     } catch (error) {
         res.status(500).json({ message: "Error updating rating.", error: error.message });
     }
 });
+
+//add favorite recipes to the favorites
+
+router.post('/:userId/add-favorites', async (req,res) => {
+    const {userId} = req.params;
+    const {recipeId} = req.body;
+    try {
+        const user = await User.findById(userId);
+        if(!user){
+            return res.status(404).json({message: 'User not Found'});
+        }
+        if(recipeId && !user.favorites.includes(recipeId)){
+            user.favorites.push(recipeId);
+            await user.save()
+            return res.status(200).json({ message: 'Recipe added to favorites', user });
+        }
+    }catch(error){
+        res.status(500).json({message: "Error updating favorites", error: error.message})
+    }
+});
+
+//remove recipes from the favorites
+
+router.post('/:userId/remove-favorites', async (req, res) => {
+    const { userId } = req.params;
+    const { recipeId } = req.body;
+    try {
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        const index = user.favorites.indexOf(recipeId);
+        if (index !== -1) {
+            user.favorites.splice(index, 1); 
+            await user.save(); 
+            return res.status(200).json({ message: 'Recipe removed from favorites', user });
+        } else {
+            return res.status(400).json({ message: 'Recipe not found in favorites' });
+        }
+    } catch (error) {
+        res.status(500).json({ message: 'Error removing recipe from favorites', error: error.message });
+    }
+});
+
+//fetch favorites
+
+router.get('/:userId/favorites', async (req, res) => {
+    const { userId } = req.params;
+    try {
+        const user = await User.findById(userId).populate('favorites'); 
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        
+        return res.status(200).json({ favorites: user.favorites });
+    } catch (error) {
+        res.status(500).json({ message: 'Error fetching favorites', error: error.message });
+    }
+});
+
 
 
 

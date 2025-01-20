@@ -30,10 +30,10 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    favorites: {
-        type: [String],
-        required: false,
-    },
+    favorites:{ type : [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Recipe',
+    }]},
     ratingsGiven: {
         type: [ratingSchema], 
         required: false,

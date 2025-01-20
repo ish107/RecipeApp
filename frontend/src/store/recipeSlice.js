@@ -5,6 +5,7 @@ const recipesSlice = createSlice({
   initialState: {
     recipes: [], 
     filteredRecipes: [],
+   
   },
   reducers: {
     setRecipes(state, action) {
@@ -15,12 +16,14 @@ const recipesSlice = createSlice({
       state.recipes.push(action.payload);
     },
     updateAverageRating(state, action){
-      const {recipeId, averageRating, count} = action.payload;
-      const recipe = state.recipes.find(item => item.id === recipeId);
-      recipe.rating.averageRating = averageRating;
-      recipe.rating.count = count;
+      const {recipe} = action.payload;
+      const existingRecipe = state.recipes.find((r) => r.recipeId === recipe._id);
+      
+      if (existingRecipe) {
+        existingRecipe.averageRatings.averageRating = averageRating;
+        existingRecipe.averageRatings.count = count;
+      } 
     }
-    
   },
 });
 

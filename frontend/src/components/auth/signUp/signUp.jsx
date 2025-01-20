@@ -12,7 +12,7 @@ const SignUp = () => {
     const submit = async (event) => {
       event.preventDefault();
       try {
-        await axiosInstance.post("/auth/register", {
+        await axiosInstance.post("/user/register", {
           username,
           firstname,
           lastname,

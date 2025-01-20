@@ -1,22 +1,31 @@
 import * as React from 'react';
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+
+import ViewRecipe from '../viewRecipeModal/viewRecipe';
+import { addUserFavorites, removeUserFavorites } from '../../../services/favoritesHandlers';
 
 import {Button, Card, CardHeader, IconButton, Rating, CardMedia, CardContent, CardActions,Typography, Paper} from '@mui/material';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 
-import ViewRecipe from '../viewRecipeModal/viewRecipe';
-
 const RecipeCard = ({recipe, date}) => {
 
+    const dispatch = useDispatch();
+
    const user = useSelector((state) => state.user.user);
+   const userFavorites = user?.favorites;
 
    const [modalOpen, setModalOpen] = useState(false);
-   const [isFavorite,setIsFavorite] = useState(false);
+   const [isFavorite,setIsFavorite] = useState(userFavorites?.includes(recipe._id) || false);
 
    const handleFavoriteToggle = () => {
-    setIsFavorite(!isFavorite); 
-  };
+    if (!isFavorite) {
+        addUserFavorites(user.id, recipe._id, dispatch);
+    } else {
+        removeUserFavorites(user.id, recipe._id, dispatch);
+    }
+    setIsFavorite(!isFavorite);
+};
 
    const handleCloseModal = () => {
     setModalOpen(false);
@@ -29,7 +38,7 @@ const RecipeCard = ({recipe, date}) => {
     return(
         <>
         <Card sx={{maxWidth: 300}}>
-            <CardHeader title={recipe.title} 
+            <CardHeader title={recipe.title}
             subheader={date} 
             action={
                 <IconButton onClick={handleFavoriteToggle}>
@@ -54,9 +63,10 @@ const RecipeCard = ({recipe, date}) => {
             <CardActions disableSpacing>
                 <Rating
                     name="read-only"
-                    value={3}
+                    value={recipe.averageRatings.averageRating}
                     //onChange={handleRating}
                 />
+                <Typography> ({recipe.averageRatings.count})</Typography>
             <Button variant='contained' sx={buttonStyles} onClick={handleOpenModal}>VIEW</Button>   
             </CardActions>
             <Paper elevation={0} />

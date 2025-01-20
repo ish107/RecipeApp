@@ -6,6 +6,9 @@ import axiosInstance from '../../../util/axios';
 import { setUserRating } from '../../../store/userSlice';
 import { Dialog, DialogActions, DialogContent, DialogTitle, Button, Typography, CardMedia, Rating, Box, List, ListItem, ListItemIcon, ListItemText, Chip} from '@mui/material';
 import KitchenIcon from '@mui/icons-material/Kitchen';
+import Alert from '@mui/material/Alert';
+
+import { updateAverageRating } from '../../../store/recipeSlice';
 
 const ViewRecipe = ({ open, onClose, recipe }) => {
 
@@ -20,6 +23,7 @@ const ViewRecipe = ({ open, onClose, recipe }) => {
   const oldRating = (ratings.find(item => item.recipeId === recipe._id))?.value || null;
 
   const [rating, setRating] = useState(oldRating && oldRating || 0);
+  const [alert, setAlert] = useState({ open: false, type: '', message: '' });
 
   const handleRatingChange = (value) => {
     setRating(value);
@@ -31,9 +35,16 @@ const ViewRecipe = ({ open, onClose, recipe }) => {
           recipeId: recipe._id,
           ratingValue: rating,
         });
+        
         dispatch(setUserRating(response.data.user.ratingsGiven)); 
+        dispatch(updateAverageRating(response.data));
+
+        setAlert({ open: true, type: 'success', message: 'Rating saved successfully!' });
+
       } catch (error) {
+
         console.error("Error updating rating:", error.message);
+        setAlert({ open: true, type: 'error', message: 'Failed to save rating. Please try again.' });
       }
   };
 
@@ -42,6 +53,7 @@ const ViewRecipe = ({ open, onClose, recipe }) => {
   }
 
   return (
+    <>
     <Dialog 
       open={open} 
       onClose={onClose} 
@@ -87,6 +99,13 @@ const ViewRecipe = ({ open, onClose, recipe }) => {
               </Button>}
               </Box>
               {!user && <Chip label="LogIn to rate this dish" onClick={handleClick} color='success' sx={{marginTop: 2}}/>}
+              {alert.open && (
+                <Alert
+                  severity={alert.type} 
+                  onClose={() => setAlert({ open: false, type: '', message: '' })} 
+                  sx={{marginTop: 2, width: '100%',}}>{alert.message}
+              </Alert>
+            )}
             </Box>
           </Box>
           <Box sx={{ width: '50%', pl: 2, }}>
@@ -138,6 +157,7 @@ const ViewRecipe = ({ open, onClose, recipe }) => {
         </Button>
       </DialogActions>
     </Dialog>
+    </>
   );
 };
 

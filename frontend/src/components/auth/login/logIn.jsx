@@ -14,12 +14,33 @@ const LogIn = () => {
     const [password, setPassword] = useState("");
     const [_, setCookies] = useCookies(["access_token"]);
     const [loading, setLoading] = useState(false);
+    const [usernameError, setUsernameError] = useState("");
+    const [passwordError, setPasswordError] = useState("");
+    const [error, setError] = useState(""); 
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
+
+    const validateForm = () => {
+      let isValid = true;
+      if (!username) {
+        setUsernameError("Username is required");
+        isValid = false;
+      } else {
+        setUsernameError("");
+      }
+      if (!password) {
+        setPasswordError("Password is required");
+        isValid = false;
+      } else {
+        setPasswordError("");
+      }
+      return isValid;
+    };
   
     const onSubmit = async (event) => {
       event.preventDefault();
+      if (!validateForm()) return;
       setLoading(true);
       try {
         const response = await axiosInstance.post("/user/login", {
@@ -28,7 +49,7 @@ const LogIn = () => {
         });
         console.log(response.data, 'data ')
         setCookies("access_token", response.data.token);
-        window.localStorage.setItem("userID", response.data.userID);
+        
         dispatch(setUser({
           user: {
             id: response.data.userID,
@@ -40,6 +61,7 @@ const LogIn = () => {
         }));
         navigate("/");
       } catch (err) {
+        setError("Invalid username or password")
         console.log(err);
       }
     };
@@ -51,6 +73,7 @@ const LogIn = () => {
           <Typography variant="h5" component="h2" gutterBottom color="#3B2A2A">
             Log In
           </Typography>
+          {error && <Typography color="error" gutterBottom>{error}</Typography>}
           <TextField
             label="Username"
             variant="outlined"
@@ -58,6 +81,8 @@ const LogIn = () => {
             margin="normal"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
+            error={!!usernameError}
+            helperText={usernameError}
           />
           <TextField
             label="Password"
@@ -67,6 +92,8 @@ const LogIn = () => {
             margin="normal"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            error={!!passwordError}
+            helperText={passwordError}
           />
           <Button type="submit" variant="contained" fullWidth sx={{ backgroundColor: "#3B2A2A", color: "#FFFFFF" }}>
             {loading ? <CircularProgress size={24} sx={{ color: "white" }} /> : "Log In"}

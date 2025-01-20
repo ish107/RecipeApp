@@ -1,5 +1,17 @@
 import mongoose from "mongoose"
 
+const recipeRatingSchema = new mongoose.Schema({
+    userId : {
+        type: mongoose.Schema.Types.ObjectId , 
+        ref:"User",
+        required: true,
+    },
+    value: {
+        type: Number,
+        required: true,
+    }
+});
+
 const recipeSchema = new mongoose.Schema({
     title:{
         type:String,
@@ -36,12 +48,20 @@ const recipeSchema = new mongoose.Schema({
         enum:  ['All','Asian', 'Breakfast', 'Lunch', 'Dinner', 'Western'],
         default: ["All"] 
     },
-    rating: {
-        average: { type: Number, default: 0 }, 
-        count: { type: Number, default: 0 },  
-        
-    }
-      
+    ratings : {
+        type: [recipeRatingSchema],
+        required: false,
+    },  
+    averageRatings: {
+        type: {
+            averageRating: { type: Number, default: 0 }, 
+            count: { type: Number, default: 0 }, 
+        },
+        required: false, 
+        default: {}, 
+    },
+    
+    
 });
 
 export const Recipe = mongoose.model('Recipe',recipeSchema);

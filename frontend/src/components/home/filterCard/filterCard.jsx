@@ -9,7 +9,7 @@ const ListItem = styled('li')(({ theme }) => ({
   margin: theme.spacing(0.5),
 }));
 
-const FilterCard = ({selectedFilters, onFilterChange}) => {
+const FilterCard = ({selectedFilters, onFilterChange, onSearchChange, searchQuery}) => {
   const [chipData, setChipData] = React.useState([
     { key: 0, label: 'All', selected: true },
     { key: 1, label: 'Asian', selected: false },
@@ -73,9 +73,7 @@ const FilterCard = ({selectedFilters, onFilterChange}) => {
         })}
       </div>
 
-      <div style={{ display: 'flex', alignItems: 'center' }}>
-        <SearchBar />
-      </div>
+      
     </Paper>
   );
 }

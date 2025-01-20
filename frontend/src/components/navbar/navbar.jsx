@@ -14,6 +14,7 @@ export const Navbar = () => {
   
   const navigate = useNavigate();
   const user = useSelector((state) => state.user.user?.username);
+
   const dispatch = useDispatch();
 
   const handleChange = (e, value) => {
@@ -29,8 +30,8 @@ export const Navbar = () => {
   };
 
   const handleLogout = () => {
-    window.localStorage.clear(); 
-    dispatch(setUser({ user: { username: '', favorites: [] }, token: '' }));  
+    dispatch(setUser({ user: { username: '', favorites: [] }, token: '', isAuthenticated: false }));  
+    removeCookies("access_token");
     navigate('/'); 
   };
 
@@ -41,7 +42,7 @@ export const Navbar = () => {
         <Tabs sx={{ marginLeft: '25%' }} onChange={handleChange} value={value} indicatorColor='secondary' textColor='black'>
           <Tab label="HOME" sx={tabStyles} value={0} component={Link} to='/' />
           <Tab label="ADD RECIPE" sx={tabStyles} value={1} component={Link} to='/createRecipe' />
-          <Tab label="PROFILE" sx={tabStyles} value={2} />
+          <Tab label="PROFILE" sx={tabStyles} value={2} component={Link} to='/Profile' disabled={!user}/>
         </Tabs>
 
         

@@ -3,6 +3,8 @@ import { Home } from "./pages/Home"
 import { Register } from "./pages/Register"
 import { CreateRecipe } from "./pages/createRecipe"
 import { Navbar } from "./components/navbar/navbar.jsx"
+import ProfileTab from "./pages/profile.jsx"
+
 import "./App.css"
 
 
@@ -15,6 +17,7 @@ function App() {
                 <Route path="/" element={<Home/>}/>
                 <Route path="/createRecipe" element={<CreateRecipe/>}/>
                 <Route path="/Register" element={<Register/>}/>
+                <Route path="/Profile" element ={<ProfileTab/>}/>
             </Routes>
             
         </Router>

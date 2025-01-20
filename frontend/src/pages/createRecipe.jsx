@@ -2,28 +2,31 @@ import { useState } from "react";
 import axios from "axios";
 import axiosInstance from "../util/axios.js";
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 
-import { useGetUserID } from "../hooks/useGetUserID.js";
 import { addRecipe } from "../store/recipeSlice.js";
+import EnhancedBackdrop from "../components/shared/backdrop.jsx"
 
 import "../styles/createRec.css";
 import { Box, TextField, Button, Typography, FormControlLabel, Checkbox, Container} from "@mui/material";
 
-
-
 export const CreateRecipe = () => {
-  const userID = useGetUserID();
+
   const [cookies, _] = useCookies(["access_token"]);
+  const user = useSelector(state=> state.user.user?.id);
+  const isAuthenticated = useSelector(state=>state.user.isAuthenticated);
+
+  console.log(user, isAuthenticated)
+
   const [recipe, setRecipe] = useState({
     title: "",
     ingredients: [{ ingredient: "", amount: "" }],
     instructions: "",
     imageUrl: "",
     cookingTime: "",
-    userOwner: userID,
+    userOwner: user,
   });
 
   const [selectedFilters, setSelectedFilters] = useState([]);
@@ -92,12 +95,8 @@ export const CreateRecipe = () => {
     try {
       const response = await axiosInstance.post(
         "/recipe",
-        { ...recipe , filters: selectedFilters},
-        {
-          headers: { authorization: cookies.access_token },
-        }
+        { ...recipe , filters: selectedFilters, userOwner: user}
       );
-      console.log(response.data)
       dispatch(addRecipe(response.data));
       alert("Recipe Created");
       navigate("/");
@@ -107,6 +106,8 @@ export const CreateRecipe = () => {
   };
 
   return (
+    <>
+    <EnhancedBackdrop isAuthenticated={isAuthenticated} onClick={()=>navigate('/Register')}/>
     <Container
       sx={{display: "flex", minHeight: "100vh", marginTop: "80px"}}>
     
@@ -250,5 +251,6 @@ export const CreateRecipe = () => {
         </Box>
       </Box>
     </Container>
+    </>
   );
 };

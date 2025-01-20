@@ -14,6 +14,7 @@ router.post('/', async(req,res)=>{
         ){
             res.status(400).send("Required fields are empty") 
         }
+        console.log(req.body)
         const newRecipe = {
             title: req.body.title,
             ingredients: req.body.ingredients,
@@ -23,6 +24,7 @@ router.post('/', async(req,res)=>{
             filters: req.body.filters,
             userOwner: req.body.userOwner
         };
+        console.log(newRecipe)
         const recipe = await Recipe.create(newRecipe);
         return res.status(201).send(recipe)
     }catch(err){
@@ -32,16 +34,24 @@ router.post('/', async(req,res)=>{
 });
 
 //get recipes
-router.get('/',async(req,res)=>{
-    try{
-        const recipes = await Recipe.find({}); //recipe.js of models
-        return res.status(200).json(recipes);
-    }catch(err){
+router.get('/', async (req, res) => {
+    try {
+        const { search } = req.query; 
+        console.log(search)
+        let filter = {};
+        if (search) {
+            filter.title = { $regex: search, $options: 'i' };  
+            console.log(filter)
+        }
+
+        const recipes = await Recipe.find(filter);  
+        return res.status(200).json(recipes);  
+    } catch (err) {
         console.log(err.message);
-        res.status(500).send({message:err.message})
+        res.status(500).send({ message: err.message });
     }
-    
 });
+
 
 //get one recipe by id
 router.get('/:id',async(req,res)=>{

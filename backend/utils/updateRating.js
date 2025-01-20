@@ -10,6 +10,7 @@ export const updateRating = async (userId, recipeId, ratingValue) => {
         const recipe = await Recipe.findById(recipeId);
 
         const recipeIdObj = new ObjectId(recipeId);
+        const userIdObj = new ObjectId(userId);
 
         if (!user) {
             throw new Error("User not found.");
@@ -22,16 +23,22 @@ export const updateRating = async (userId, recipeId, ratingValue) => {
             user.ratingsGiven.push({ recipeId: recipeId, value: ratingValue });
         }
 
-        const totalRatings = recipe.rating.reduce((acc, rating) => acc + rating.value, 0);
-        const averageRating = totalRatings / recipe.rating.length;
+        const existingUserRating = recipe.ratings.find(rating => rating.userId.equals(userIdObj));
+        if (existingUserRating) {
+            existingUserRating.value = ratingValue;
+        } else {
+            recipe.ratings.push({ userId: userId, value: ratingValue });
+        }
 
-        // Update the recipe with the new values
-        recipe.rating = averageRating;
-        recipe.count = recipe.rating.length;
+        const totalRatings = recipe.ratings.reduce((acc, rating) => acc + rating.value, 0);
+        recipe.averageRatings.averageRating =( totalRatings/ recipe.ratings.length).toFixed(1);
+        recipe.averageRatings.count = recipe.ratings.length;
+        console.log(existingRating, totalRatings)
 
         await user.save();
+        await recipe.save();
 
-        return { user };
+        return { user, recipe };
     } catch (error) {
         throw new Error(error.message);
     }

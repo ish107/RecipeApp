@@ -1,5 +1,3 @@
-import * as React from 'react';
-
 import SearchIcon from '@mui/icons-material/Search';
 import { styled, alpha } from '@mui/material/styles';
 import InputBase from '@mui/material/InputBase';
@@ -50,20 +48,25 @@ const Search = styled('div')(({ theme }) => ({
   }));
 
 
-
-
-const SearchBar = () => {
+  const SearchBar = ({ setSearchResults, searchQuery, setSearchQuery }) => {
+    const handleChange = (event) => {
+      setSearchQuery(event.target.value);
+      setSearchResults(event.target.value);
+    };
+  
     return (
-        <Search>
-            <SearchIconWrapper>
-                <SearchIcon color='#3B2A2A'/>
-            </SearchIconWrapper>
-            <StyledInputBase
-                    placeholder="Search…"
-                    inputProps={{ 'aria-label': 'search' }}
-            />
-        </Search>
-    )
-}
-
-export default SearchBar;
+      <Search>
+        <SearchIconWrapper>
+          <SearchIcon color='#3B2A2A' />
+        </SearchIconWrapper>
+        <StyledInputBase
+          value={searchQuery}  
+          placeholder="Search…"
+          inputProps={{ 'aria-label': 'search' }}
+          onChange={handleChange}  
+        />
+      </Search>
+    );
+  };
+  
+  export default SearchBar;
