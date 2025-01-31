@@ -44,3 +44,7 @@ npm run dev
 
 License
 This project is licensed under the MIT License.
+
+### Images
+![Home View](https://raw.githubusercontent.com/ish107/RecipeApp/main/screenshots/home-view.jpg)
+
