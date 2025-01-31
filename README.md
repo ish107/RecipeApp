@@ -60,6 +60,8 @@ This project is licensed under the MIT License.
 
 <div style="display: flex; justify-content: space-between;">
     <img src="https://raw.githubusercontent.com/ish107/RecipeApp/main/screenshots/add-recipe-notLogged.jpg" alt="Add Recipe Not Logged" width="300"/>
+    <img src="https://raw.githubusercontent.com/ish107/RecipeApp/main/screenshots/search.jpg" alt="Search Results" width="300"/>
+    <img src="https://raw.githubusercontent.com/ish107/RecipeApp/main/screenshots/favorite-recipes.jpg" alt="Favorite Recipes" width="300"/>
 </div>
 
 
